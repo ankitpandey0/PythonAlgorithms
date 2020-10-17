@@ -1,42 +1,34 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Oct  7 20:51:57 2020
+#!/usr/bin/env python3
+#recursive or bottom-up approach decreases the number of iterations hence providing increased efficiency 
 
-@author: anjalisingh
-"""
+#define a function to check for continuing the permutations search ... use the distance formula to get the diagonal points 
 
-class Solution(object):
-    def solveNQueens(self, n):
-        # i is column index
-        # left: left diagonal: \ level-i
-        # right: right diagonal: / level+i
-        self.col = [0]*n # not occupied column
-        self.left = [0]*(2*n-1) # number of left diagonal
-        self.right = [0]*(2*n-1)
-        board = [['.' for x in range(n)] for y in range(n)]
-        self.resultBoard = []
-        self.backTrack(n, 0, board)
-        return self.resultBoard
+def whether_to_extend(perm):
+    i = len(perm) - 1
+    for j in range(i):
+        if i-j == abs(perm[i] - perm[j]):
+            return False
+    return True
 
-    def backTrack(self, n, level, board):
-        if level == n: # finish
-            res = []
-            for i in range(n):
-                res.append(''.join(board[i]))
-            self.resultBoard.append(res)
-            return
-        for i in range(n): # iterate every column
-            # if col, left, right are all not accupied, put a queue here
-            if not self.col[i] and not self.left[level-i] and not self.right[level+i]:
-                board[level][i] = 'Q'
-                self.col[i] = 1
-                self.left[level-i] = 1
-                self.right[level+i] = 1 # choose
-                self.backTrack(n, level+1, board) # explore
-                board[level][i] = '.' # un choose
-                self.col[i] = 0
-                self.left[level-i] = 0
-                self.right[level+i] = 0
+# define a function to generate the permutations recursively while checking the conditions associated with backtracing
 
-# Queen  = Solution()
-# print(Queen.solveNQueens(4))
+def extend(perm, n):
+     
+    #write the base case
+    if len(perm) == n:
+        print(perm)
+        #comment the following line to get all possible permutaions
+        exit()
+
+    for i in range(n):
+        if i not in perm:
+            perm.append(i)
+            if whether_to_extend(perm):
+                extend(perm, n)
+            
+            perm.pop()
+            
+
+if __name__ == "__main__":
+    n = int(input("Enter the number of rows on the chess board:"))
+    extend([], n)
